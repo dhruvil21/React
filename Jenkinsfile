@@ -21,7 +21,7 @@ ls'''
 
     stage('Connecting') {
       steps {
-        sh 'ssh test@192.168.9.5 pwd cd testing pwd ls'
+        sh 'ssh test@192.168.9.5 cd testing pwd ls'
       }
     }
 
