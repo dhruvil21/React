@@ -47,12 +47,18 @@ ls'''
           }
         }
 
-        stage('') {
+        stage('conventional') {
           steps {
             sh 'scp -r build.zip test@192.168.9.5:/var/www/advam-api'
           }
         }
 
+      }
+    }
+
+    stage('Unzip') {
+      steps {
+        sh 'ssh test@192.168.9.5 unzip -o build.zip /var/www/advam-api'
       }
     }
 
