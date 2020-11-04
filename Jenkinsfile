@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Testing') {
       parallel {
         stage('Build') {
           steps {
@@ -25,20 +25,15 @@ ls'''
       }
     }
 
-    stage('Testing Connecting Step') {
-      parallel {
-        stage('Testing Connecting Step') {
-          steps {
-            sh 'ssh test@192.168.9.5 bash /home/test/testing/before_update.sh'
-          }
-        }
+    stage('SSH') {
+      steps {
+        sh 'ssh test@192.168.9.5  < before_update.sh'
+      }
+    }
 
-        stage('SSH') {
-          steps {
-            sh 'ssh test@192.168.9.5  < before_update.sh'
-          }
-        }
-
+    stage('Building') {
+      steps {
+        sh 'npm install npm run build'
       }
     }
 
