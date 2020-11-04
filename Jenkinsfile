@@ -11,8 +11,7 @@ pipeline {
 
         stage('Preparation') {
           steps {
-            sh '''sh(script: "pwd", label: "DELETING Stuff")
-'''
+            sh 'sh(script: "pwd")'
           }
         }
 
