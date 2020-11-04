@@ -11,7 +11,7 @@ pipeline {
 
         stage('Preparation') {
           steps {
-            sh 'sh"(script: "pwd")"'
+            sh 'pwd'
           }
         }
 
