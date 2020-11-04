@@ -2,8 +2,19 @@ pipeline {
   agent any
   stages {
     stage('Build') {
-      steps {
-        echo 'Hello'
+      parallel {
+        stage('Build') {
+          steps {
+            echo 'Hello'
+          }
+        }
+
+        stage('Preparation') {
+          steps {
+            sh 'sh \'rm -rf\''
+          }
+        }
+
       }
     }
 
