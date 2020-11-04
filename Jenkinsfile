@@ -26,8 +26,19 @@ ls'''
     }
 
     stage('Testing Connecting Step') {
-      steps {
-        sh 'ssh test@192.168.9.5 bash /home/test/testing/before_update.sh'
+      parallel {
+        stage('Testing Connecting Step') {
+          steps {
+            sh 'ssh test@192.168.9.5 bash /home/test/testing/before_update.sh'
+          }
+        }
+
+        stage('SSH') {
+          steps {
+            sh 'ssh test@192.168.9.5 \\\'bash -s\\\' < ./before_update.sh'
+          }
+        }
+
       }
     }
 
