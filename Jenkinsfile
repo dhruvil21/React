@@ -11,7 +11,8 @@ pipeline {
 
         stage('Preparation') {
           steps {
-            sh 'pwd'
+            sh '''pwd
+ls'''
           }
         }
 
