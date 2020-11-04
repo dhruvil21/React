@@ -40,7 +40,7 @@ ls'''
 
     stage('Transfering the code') {
       steps {
-        sh 'tar -czf - build | ssh test@192.168.9.5 "tar -C /home/test/testing -xzf -"'
+        sh 'tar -czf - build | ssh test@192.168.9.5 "tar -C /var/www/dms -xzf -"'
       }
     }
 
