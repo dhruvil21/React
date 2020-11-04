@@ -33,7 +33,8 @@ ls'''
 
     stage('Building') {
       steps {
-        sh 'npm install npm run build'
+        sh 'npm install'
+        sh 'npm run build'
       }
     }
 
