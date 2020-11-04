@@ -58,7 +58,7 @@ ls'''
 
     stage('Unzip') {
       steps {
-        sh 'ssh test@192.168.9.5 unzip -o build.zip /var/www/advam-api'
+        sh 'ssh test@192.168.9.5 unzip -o  /var/www/advam-api/build.zip'
       }
     }
 
