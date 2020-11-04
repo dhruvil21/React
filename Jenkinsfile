@@ -35,12 +35,24 @@ ls'''
       steps {
         sh 'npm install'
         sh 'npm run build'
+        sh 'zip -r build.zip .'
       }
     }
 
     stage('Transfering the code') {
-      steps {
-        sh 'tar -czf - build | ssh test@192.168.9.5 "tar -C /var/www/dms -xzf -"'
+      parallel {
+        stage('Transfering the code') {
+          steps {
+            sh 'tar -czf - build | ssh test@192.168.9.5 "tar -C /var/www/dms -xzf -"'
+          }
+        }
+
+        stage('') {
+          steps {
+            sh 'scp -r build.zip test@192.168.9.5:/var/www/advam-api'
+          }
+        }
+
       }
     }
 
