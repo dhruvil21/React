@@ -21,7 +21,7 @@ ls'''
 
     stage('Connecting') {
       steps {
-        sh 'ssh test@192.168.9.5 bash /testing/before_update.sh'
+        sh 'ssh test@192.168.9.5 bash /home/test/testing/before_update.sh'
       }
     }
 
