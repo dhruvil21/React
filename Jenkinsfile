@@ -11,7 +11,8 @@ pipeline {
 
         stage('Preparation') {
           steps {
-            sh 'rm -rf'
+            sh '''sh(script: "rm -rf .", label: "DELETING Stuff")
+'''
           }
         }
 
