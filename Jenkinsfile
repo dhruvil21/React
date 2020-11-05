@@ -34,7 +34,7 @@ ls'''
     stage('Building') {
       post {
         always {
-          archiveArtifacts 'target/*.hpi,target/*.jpi'
+          archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
           junit 'build/reports/**/*.xml'
         }
 
