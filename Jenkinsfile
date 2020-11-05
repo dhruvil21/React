@@ -32,39 +32,23 @@ ls'''
     }
 
     stage('Building') {
-      steps {
-        sh 'npm install'
-        sh 'npm run build'
-        sh 'zip -r build.zip .'
-      }
       post {
         always {
           archiveArtifacts 'target/*.hpi,target/*.jpi'
           junit 'build/reports/**/*.xml'
         }
+
+      }
+      steps {
+        sh 'npm install'
+        sh 'npm run build'
+        sh ' archiveArtifacts \'target/*.hpi,target/*.jpi\''
       }
     }
 
     stage('Transfering the code') {
-      parallel {
-        stage('Transfering the code') {
-          steps {
-            sh 'tar -czf - build | ssh test@192.168.9.5 "tar -C /var/www/dms -xzf -"'
-          }
-        }
-
-        stage('conventional') {
-          steps {
-            sh 'scp -r build.zip test@192.168.9.5:/var/www/advam-api'
-          }
-        }
-
-      }
-    }
-
-    stage('Unzip') {
       steps {
-        sh 'ssh test@192.168.9.5 unzip -o  /var/www/advam-api/build.zip'
+        sh 'tar -czf - build | ssh test@192.168.9.5 "tar -C /var/www/dms -xzf -"'
       }
     }
 
