@@ -37,6 +37,12 @@ ls'''
         sh 'npm run build'
         sh 'zip -r build.zip .'
       }
+      post {
+        always {
+          archiveArtifacts 'target/*.hpi,target/*.jpi'
+          junit 'build/reports/**/*.xml'
+        }
+      }
     }
 
     stage('Transfering the code') {
