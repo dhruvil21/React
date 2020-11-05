@@ -34,7 +34,7 @@ ls'''
     stage('Building') {
       post {
         always {
-          archiveArtifacts artifacts: 'build/*', fingerprint: true
+          archiveArtifacts artifacts: 'build', fingerprint: true
           //junit 'build/reports/**/*.xml'
         }
 
