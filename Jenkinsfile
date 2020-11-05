@@ -34,8 +34,8 @@ ls'''
     stage('Building') {
       post {
         always {
-          archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
-          junit 'build/reports/**/*.xml'
+          archiveArtifacts artifacts: 'build/*', fingerprint: true
+          //junit 'build/reports/**/*.xml'
         }
 
       }
