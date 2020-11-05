@@ -34,7 +34,7 @@ ls'''
     stage('Building') {
       post {
         always {
-          archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+          archiveArtifacts 'target/*.hpi,target/*.jpi'
           junit 'build/reports/**/*.xml'
         }
 
@@ -42,7 +42,6 @@ ls'''
       steps {
         sh 'npm install'
         sh 'npm run build'
-        sh ' archiveArtifacts \'target/*.hpi,target/*.jpi\''
       }
     }
 
