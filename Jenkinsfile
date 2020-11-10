@@ -34,8 +34,7 @@ pipeline {
     stage('Building') {
       post {
         always {
-          archiveArtifacts artifacts: 'build/**/*.zip', fingerprint: true
-          //junit 'build/reports/**/*.xml'
+          archiveArtifacts(artifacts: 'build/**/*.zip', fingerprint: true)
         }
 
       }
