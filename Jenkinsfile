@@ -34,7 +34,7 @@ pipeline {
     stage('Building') {
       post {
         always {
-          archiveArtifacts(artifacts: 'build/**/*.zip', fingerprint: true)
+          archiveArtifacts(artifacts: 'build/*.zip', onlyIfSuccessful: true)
         }
 
       }
