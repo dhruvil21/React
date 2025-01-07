@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-hello-world-deployment
+  labels:
+    app: react-hello-world
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: react-hello-world
+  template:
+    metadata:
+      labels:
+        app: react-hello-world
+    spec:
+      containers:
+      - name: react-hello-world
+        image: gcr.io/YOUR_PROJECT_ID/react-hello-world:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-hello-world-service
+spec:
+  selector:
+    app: react-hello-world
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-hello-world-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: YOUR_DOMAIN_NAME
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: react-hello-world-service
+            port:
+              number: 80
