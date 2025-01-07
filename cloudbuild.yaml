@@ -1,57 +1,38 @@
 steps:
-  # Install dependencies and build the React app
-  - name: 'node:16'
+  # Step 1: Checkout the repository branch and print the branch name
+  - name: 'gcr.io/cloud-builders/git'
+    id: 'Checkout repository'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        npm install
-        npm run build
-
-  # Copy the build output to a folder
-  - name: 'gcr.io/cloud-builders/cp'
-    args:
-      - '-R'
-      - 'build/'
-      - '/workspace/build/'
-
-  # Build a Docker image for the app
+        echo "Checking out branch: $(BRANCH_NAME)"
+        git checkout $(BRANCH_NAME)
+  
+  # Step 2: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Docker image'
     args:
       - 'build'
       - '-t'
-      - '${_IMAGE_NAME}:${_TAG}'
+      - 'gcr.io/$PROJECT_ID/react-app:$COMMIT_SHA'
       - '.'
 
-  # Push the Docker image to Google Container Registry or Artifact Registry
+  # Step 3: Push the Docker image to Google Container Registry (GCR)
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Docker image to GCR'
     args:
       - 'push'
-      - '${_IMAGE_NAME}:${_TAG}'
+      - 'gcr.io/$PROJECT_ID/react-app:$COMMIT_SHA'
 
-  # Deploy to Google Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Step 4: Deploy the Docker image to Google Kubernetes Engine (GKE)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Deploy to GKE'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud run deploy ${_SERVICE_NAME} \
-          --image ${_IMAGE_NAME}:${_TAG} \
-          --platform managed \
-          --region ${_REGION} \
-          --allow-unauthenticated
-
-substitutions:
-  _IMAGE_NAME: 'gcr.io/$PROJECT_ID/react-hello-world'
-  _TAG: 'latest'
-  _SERVICE_NAME: 'react-hello-world-service'
-  _REGION: 'us-central1'
-
-timeout: '900s'
-
-# Artifacts to store
-artifacts:
-  objects:
-    location: 'gs://$PROJECT_ID-cloudbuild-artifacts/'
-    paths:
-      - 'build/**'
+        echo "Deploying to GKE..."
+        gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID
+        kubectl set image deployment/react-app react-app=gcr.io/$PROJECT_ID/react-app:$COMMIT_SHA
+        kubectl rollout status deployment/react-app
